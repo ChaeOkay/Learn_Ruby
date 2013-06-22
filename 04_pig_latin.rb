@@ -1,28 +1,53 @@
 def translate(words_to_pig)
-
-  if words_to_pig != words_to_pig.downcase
-    words_to_pig.downcase
-    words_array = pig_latinize(words_to_pig).map do |word|
-      word.capitalize!
-    end
-  else
-    words_array = pig_latinize(words_to_pig)
-  end
-  words_array.join(" ")
-end
-
-
-def pig_latinize(words)
-  pig_words = words.split(" ")
+  pig_words = words_to_pig.split(" ")
 
   pig_words.map! do |word|
-    if word.start_with?('a', 'e', 'i', 'o')
-      word = word + "ay"
-    else
-      word_start = word[/^[^aeio]+/]
-      word.delete!(word_start)
-      word = word.insert(-1, word_start+"ay")
-    end
+    $punctuation = ""
+    $caps = false
+
+    check_capitalization(word)
+    check_punctuation(word)
+
+    pigify(word)
+
+    add_capitalization?(word)
+    add_punctuation?(word)
   end
-  pig_words
+  pig_words.join(" ")
 end
+
+
+def pigify(word)
+  if word.start_with?("a", "e", "i", "o")
+    word + "ay"  # <-----------------not returning
+  else
+    word_start = word[/^[^aeio]+/]
+    word.delete!(word_start)
+    word.insert(-1, word_start+"ay")
+  end
+end
+
+def check_capitalization(word)
+  if word != word.downcase
+    word.downcase 
+    $caps = true
+  end
+end
+
+def add_capitalization?(word)
+  word.capitalize! if $caps == true
+end
+
+def check_punctuation(word)
+  if word.end_with?('.','!', '?', ',')
+    $punctuation = word[-1] 
+    word.gsub!(/\.|\!|\?|\,/, '')
+  end
+end
+
+def add_punctuation?(word)
+  $punctuation.length != 0 ? word + $punctuation : word
+end
+
+p translate("apple")
+p translate("That's true. No way. apple")
