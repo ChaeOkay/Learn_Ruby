@@ -8,18 +8,20 @@ def translate(words_to_pig)
     check_capitalization(word)
     check_punctuation(word)
 
-    pigify(word)
+    word = pigify(word)
 
     add_capitalization?(word)
     add_punctuation?(word)
   end
+
   pig_words.join(" ")
 end
 
 
 def pigify(word)
-  if word.start_with?("a", "e", "i", "o")
-    word + "ay"  # <-----------------not returning
+  if word =~ /^[aeio]/i
+  #if word.start_with?("a", "e", "i", "o") #<----regex for caps
+    word + "ay"
   else
     word_start = word[/^[^aeio]+/]
     word.delete!(word_start)
@@ -48,6 +50,3 @@ end
 def add_punctuation?(word)
   $punctuation.length != 0 ? word + $punctuation : word
 end
-
-p translate("apple")
-p translate("That's true. No way. apple")
