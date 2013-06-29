@@ -1,17 +1,16 @@
 class Temperature
 
   def initialize(degrees)
-    @temperature = degrees
-    @temperature[:f] ||= nil
-    @temperature[:c] ||= nil
+    @temperature = Hash.new
+    @temperature.merge!(degrees)
   end
 
   def in_fahrenheit
-    @temperature[:f].nil? ?  self.ftoc : @temperature[:f]
+    @temperature[:f] ? @temperature[:f] : self.ftoc
   end
 
   def in_celsius
-    @temperature[:c].nil? ?  self.ctof : @temperature[:c]
+    @temperature[:c] ?  @temperature[:c] : self.ctof 
   end
 
   def self.from_celsius(degrees)
@@ -35,4 +34,15 @@ class Temperature
 end
 
 class Celsius < Temperature
+  def initialize(degrees_in_c)
+    @temperature = Hash.new
+    @temperature[:c] = degrees_in_c
+  end
+end
+
+class Fahrenheit < Temperature
+  def initialize(degrees_in_f)
+    @temperature = Hash.new
+    @temperature[:f] = degrees_in_f
+  end
 end
