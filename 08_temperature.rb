@@ -6,11 +6,11 @@ class Temperature
   end
 
   def in_fahrenheit
-    @temperature[:f] ? @temperature[:f] : self.ftoc
+    @temperature[:f] ||= self.ftoc
   end
 
   def in_celsius
-    @temperature[:c] ?  @temperature[:c] : self.ctof 
+    @temperature[:c] ||= self.ctof 
   end
 
   def self.from_celsius(degrees)
