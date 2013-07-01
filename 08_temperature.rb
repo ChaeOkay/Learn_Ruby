@@ -1,8 +1,7 @@
 class Temperature
 
   def initialize(degrees)
-    @temperature = Hash.new
-    @temperature.merge!(degrees)
+    @temperature = degrees
   end
 
   def in_fahrenheit
