@@ -1,8 +1,5 @@
 class Book
-
-  def title=(title)   
-    @title = title.capitalize
-  end
+attr_accessor :title
 
   def title
     @title.capitalize
