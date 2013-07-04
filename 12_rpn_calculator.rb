@@ -1,16 +1,5 @@
-class RPNCalculator
-  attr_reader :rpn_holder
-  attr_accessor :value
-
-  def initialize
-    @rpn_holder = []
-  end
-
-  def push(number)
-    @rpn_holder << number
-  end
-
-    def plus
+module RPNFunctions
+  def plus
     calculate { |num1, num2| num1 + num2 }
   end
 
@@ -25,8 +14,21 @@ class RPNCalculator
   def times
     calculate { |num1, num2| num1 * num2 }
   end
+end
 
-  private
+class RPNCalculator
+  include RPNFunctions
+
+  attr_reader :rpn_holder
+  attr_accessor :value
+
+  def initialize
+    @rpn_holder = []
+  end
+
+  def push(number)
+    @rpn_holder << number
+  end
 
   def calculate
     raise "calculator is empty" if @rpn_holder.empty?
