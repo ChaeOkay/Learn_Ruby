@@ -10,17 +10,29 @@ class RPNCalculator
     @rpn_holder << number
   end
 
-  def plus
-    @rpn_holder.push( @rpn_holder.pop + @rpn_holder.pop )
-    @value = @rpn_holder.last
+    def plus
+    calculate { |num1, num2| num1 + num2 }
   end
 
   def minus
-    num1, num2 = @rpn_holder.pop, @rpn_holder.pop
-    @rpn_holder.push( num1 - num2 )
-    @value = @rpn_holder.last
+    calculate { |num1, num2| num1 - num2 }
   end
 
   def divide
+    calculate { |num1, num2| num1.to_f / num2 }
+  end
+
+  def times
+    calculate { |num1, num2| num1 * num2 }
+  end
+
+  private
+
+  def calculate
+    raise "calculator is empty" if @rpn_holder.empty?
+
+    num1, num2 = @rpn_holder.pop, @rpn_holder.pop
+    @rpn_holder.push( yield num1, num2)
+    @value = @rpn_holder.last
   end
 end
