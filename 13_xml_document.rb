@@ -1,8 +1,10 @@
 class XmlDocument
   attr_reader :tag_name
 
-  def initialize
+  def initialize(status = nil)
     @tag_name = ""
+    @indent = status
+    @s_start = 0
   end
 
   def method_missing( method_name, args = {}, &block)
@@ -10,7 +12,24 @@ class XmlDocument
     method = lambda { method_name }
 
     if block_given?
-      @tag_name = "<#{method.call}>#{yield}</#{method.call}>"
+      if @indent == true
+          #pattern - look at refactoring to block
+
+          @s_start += 2
+
+          @tag_name = "<#{method.call}>\n"
+          @tag_name += ("\s"*@s_start)
+
+          @tag_name += "#{yield}\n"
+
+          @tag_name += ("\s"*(@s_start -= 2))
+          @tag_name += "</#{method.call}>"
+
+          #missing \n at last iteration -
+          # add after block (before method return)
+      else
+        @tag_name = "<#{method.call}>#{yield}</#{method.call}>"
+      end
     elsif args.empty?
       @tag_name = "<#{method.call}/>"
     else
