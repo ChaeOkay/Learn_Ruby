@@ -9,7 +9,9 @@ class XmlDocument
 
     method = lambda { method_name }
 
-    if args.empty?
+    if block_given?
+      @tag_name = "<#{method.call}>#{yield}</#{method.call}>"
+    elsif args.empty?
       @tag_name = "<#{method.call}/>"
     else
       args.each do |key, value|
@@ -19,8 +21,3 @@ class XmlDocument
     end
   end
 end
-
-
-#lambda - method name
-#lambda = args => block should parse data to string - create
-#&block - check if/else statement block_given?
