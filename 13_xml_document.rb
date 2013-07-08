@@ -4,7 +4,6 @@ class XmlDocument
   def initialize(status = nil)
     @tag_name = ""
     @indent = status
-    @s_start = 0
   end
 
   def method_missing( method_name, args = {}, &block)
@@ -15,10 +14,10 @@ class XmlDocument
       if @indent == true
           #pattern - look at refactoring to block
 
-          @s_start += 2
+          @s_start = 0
 
           @tag_name = "<#{method.call}>\n"
-          @tag_name += ("\s"*@s_start)
+          @tag_name += ("\s"*(@s_start += 2))
 
           @tag_name += "#{yield}\n"
 
