@@ -1,41 +1,22 @@
-class XmlDocument
-  attr_reader :tag_name
+require 'builder'
 
-  def initialize(status = nil)
-    @tag_name = ""
-    @indent = status
+class XmlDocument
+
+  def initialize(indent = nil)
   end
 
   def method_missing( method_name, args = {}, &block)
+    builder = Builder::XmlMarkup.new
 
-    method = lambda { method_name }
-
-    if block_given?
-      if @indent == true
-          #pattern - look at refactoring to block
-
-          @s_start = 0
-
-          @tag_name = "<#{method.call}>\n"
-          @tag_name += ("\s"*(@s_start += 2))
-
-          @tag_name += "#{yield}\n"
-
-          @tag_name += ("\s"*(@s_start -= 2))
-          @tag_name += "</#{method.call}>"
-
-          #missing \n at last iteration -
-          # add after block (before method return)
-      else
-        @tag_name = "<#{method.call}>#{yield}</#{method.call}>"
-      end
-    elsif args.empty?
-      @tag_name = "<#{method.call}/>"
+    if args.empty?
+      @msg = method_name
     else
       args.each do |key, value|
-         @tag_name = "<#{method.call} " + "#{key}='#{value}'/>"
+         @msg = "#{method_name} " + "#{key}='#{value}'"
       end
-      @tag_name
+      @msg
     end
+    builder.tag!(@msg)
   end
+
 end
